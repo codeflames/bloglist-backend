@@ -1,0 +1,27 @@
+{
+  "name": "bloglist",
+  "version": "0.0.1",
+  "description": "bloglist allows users to save information about interesting blogs they have stumbled across on the internet.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint ."
+  },
+  "engines": {
+    "node": "18.16.0"
+  },
+  "author": "Yereka Ueh-kabari",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0",
+    "nodemon": "^2.0.22"
+  }
+}
