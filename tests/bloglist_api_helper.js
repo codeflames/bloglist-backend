@@ -40,6 +40,19 @@ const initialBlogs = [
   }
 ]
 
+const getBearerToken = async (api, username, password) => {
+  const response = await api
+    .post('/api/login')
+    .send({
+      username: username,
+      password: password
+    })
+  return response.body.token
+
+}
+
+
 module.exports = {
-  initialBlogs
+  initialBlogs,
+  getBearerToken
 }

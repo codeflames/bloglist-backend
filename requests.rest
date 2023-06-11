@@ -3,10 +3,45 @@ GET http://localhost:3003/api/blogs/
 ###
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NDg1ODRmZGE0ZmQ3YzUwMThmYWRiYWIiLCJpYXQiOjE2ODY0ODYwOTAsImV4cCI6MTY4NjQ4OTY5MH0.uk0XsbLnDm0aeVe_xxUe1GHMTgp1-L6vUdCAdvPTVbo
 
 {
-    "title": "Test Blog 3",
-    "author": "Test Author 3",
+    "title": "Test Blog 5",
+    "author": "Test Author 4",
     "url": "http://test.com",
     "likes": 0
 }
+
+###
+DELETE http://localhost:3003/api/blogs/6485bc60d258cfd72aba184a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NDg1ODRmZGE0ZmQ3YzUwMThmYWRiYWIiLCJpYXQiOjE2ODY0ODYwOTAsImV4cCI6MTY4NjQ4OTY5MH0.uk0XsbLnDm0aeVe_xxUe1GHMTgp1-L6vUdCAdvPTVbo
+
+
+###
+###
+### USER REQUESTS
+###
+###
+
+
+### CREATE USER REQUEST
+POST http://localhost:3003/api/users/
+Content-Type: application/json
+
+{
+    "username": "testuser01",
+    "name": "Test User01",
+    "password": "testpassword"
+}
+
+### LOGIN REQUEST
+POST http://localhost:3003/api/login/
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "testpassword"
+}
+
+### GET ALL USERS
+GET http://localhost:3003/api/users/

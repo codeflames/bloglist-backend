@@ -5,8 +5,10 @@ const app = require('../app')
 const api = supertest(app)
 const Blogs = require('../models/blogs')
 const initialBlogs = require('./bloglist_api_helper').initialBlogs
+const tokenHelper = require('./bloglist_api_helper').getBearerToken
 
 mongoose.set('bufferTimeoutMS', 10000)
+
 
 
 
@@ -14,7 +16,7 @@ mongoose.set('bufferTimeoutMS', 10000)
 beforeEach(async () => {
   await Blogs.deleteMany({})
   await Blogs.insertMany(initialBlogs)
-})
+},)
 
 describe('GETTING BLOGLIST', () => {
 
@@ -33,16 +35,35 @@ describe('GETTING A SINGLE BLOG', () => {
   })
 })
 
+
+
+
 describe('POSTING BLOGS', () => {
 
-  test('API should create a new blog', async () => {
+  test('API should return 401 if token is missing', async () => {
     const newBlog = {
       title: 'Test Blog',
       author: 'Test Author',
       url: 'http://testurl.com',
       likes: 0
     }
-    await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
+    await api.post('/api/blogs').set(
+      { 'Content-Type': 'application/json' }
+    ).send(newBlog).expect(401)
+  })
+
+  test('API should create a new blog', async () => {
+    const token = await tokenHelper(api, 'testuser', 'testpassword')
+
+    const newBlog = {
+      title: 'Test Blog',
+      author: 'Test Author',
+      url: 'http://testurl.com',
+      likes: 0
+    }
+    await api.post('/api/blogs').set({
+      'Authorization': `Bearer ${token}` }
+    ).send(newBlog).expect(201).expect('Content-Type', /application\/json/)
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(initialBlogs.length + 1)
     expect(response.body[initialBlogs.length].title).toEqual('Test Blog')
@@ -52,28 +73,35 @@ describe('POSTING BLOGS', () => {
   })
 
   test('API should return 0 likes if likes is missing', async () => {
+    const token = await tokenHelper(api, 'testuser', 'testpassword')
+
     const newBlog = {
       title: 'Test Blog',
       author: 'Test Author',
       url: 'http://testurl.com',
     }
-    await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
+    await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(201).expect('Content-Type', /application\/json/)
     const response = await api.get('/api/blogs')
     expect(response.body[initialBlogs.length].likes).toEqual(0)
   })
 
   test('API should return 400 if title or url is missing', async () => {
+    const token = await tokenHelper(api, 'testuser', 'testpassword')
+
     const newBlog = {
       title: 'Test Blog',
       author: 'Test Author',
     }
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    await api.post('/api/blogs').set({
+      'Authorization': `Bearer ${token}` }
+    ).send(newBlog).expect(400)
 
     const newBlog2 = {
       author: 'Test Author',
       url: 'http://testurl.com',
     }
-    await api.post('/api/blogs').send(newBlog2).expect(400)
+    await api.post('/api/blogs').set({
+      'Authorization': `Bearer ${token}` }).send(newBlog2).expect(400)
   })
 })
 
