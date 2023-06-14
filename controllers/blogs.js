@@ -31,10 +31,16 @@ blogRouter.post('/', async (request, response) => {
     user: currentUser._id
   })
   const savedBlog = await blog.save()
-  response.status(201).json(savedBlog)
+
+
 
   currentUser.blogs = currentUser.blogs.concat(savedBlog._id)
   await currentUser.save()
+
+  const blogResponse = await Blog.findById(savedBlog._id).populate('user', { username: 1, name: 1, id: 1 })
+
+  response.status(201).json(blogResponse)
+
 })
 
 blogRouter.delete('/:id', async (request, response) => {
@@ -43,9 +49,9 @@ blogRouter.delete('/:id', async (request, response) => {
 
   if (!token) {
     return response.status(401).json({ error: 'token missing or invalid' })
-  }else if (!user) {
+  } else if (!user) {
     return response.status(401).json({ error: 'user missing or invalid' })
-  }else if (!user.blogs.includes(request.params.id)) {
+  } else if (!user.blogs.includes(request.params.id)) {
     return response.status(401).json({ error: 'Unauthorized action: only creators of blogs can delete their blogs' })
   }
 
@@ -60,10 +66,11 @@ blogRouter.put('/:id', async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    user: request.user.id
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user', { username: 1, name: 1, id: 1 })
   response.json(updatedBlog)
 })
 
