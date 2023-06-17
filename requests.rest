@@ -42,9 +42,9 @@ POST http://localhost:3003/api/users/
 Content-Type: application/json
 
 {
-    "username": "testuser2",
-    "name": "Test User2",
-    "password": "testpassword"
+    "username": "Codeflames",
+    "name": "Yereka Ueh-kabari",
+    "password": "Testing@123"
 }
 
 ### LOGIN REQUEST
@@ -52,8 +52,8 @@ POST http://localhost:3003/api/login/
 Content-Type: application/json
 
 {
-    "username": "testuser2",
-    "password": "testpassword"
+    "username": "Codeflames",
+    "password": "Testing@123"
 }
 
 ### GET ALL USERS
